@@ -2724,7 +2724,21 @@ module.exports = grammar({
     // but this is good enough.
     _single_quote_string: (_) => seq(/([uU]&)?'([^']|'')*'/, repeat(/'([^']|'')*'/)),
     _literal_string: ($) =>
-      prec(1, choice($._single_quote_string, $._double_quote_string, $._dollar_quoted_string)),
+      prec(
+        1,
+        choice(
+          $._single_quote_string,
+          $._double_quote_string,
+          alias(
+            seq(
+              field('tag', $._dollar_quoted_string_start_tag_label),
+              field('value', $._dollar_quoted_string),
+              $._dollar_quoted_string_end_tag
+            ),
+            $.string
+          )
+        )
+      ),
     _natural_number: (_) => /\d+/,
     _integer: ($) =>
       seq(
