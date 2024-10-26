@@ -5,8 +5,9 @@ module.exports = grammar({
 
   externals: ($) => [
     $._dollar_quoted_string_start_tag,
+    $._dollar_quoted_string_start_tag_label,
     $._dollar_quoted_string_end_tag,
-    $._dollar_quoted_string
+    $._dollar_quoted_string_value
   ],
 
   conflicts: ($) => [
@@ -2732,7 +2733,7 @@ module.exports = grammar({
           alias(
             seq(
               field('tag', $._dollar_quoted_string_start_tag_label),
-              field('value', $._dollar_quoted_string),
+              field('value', $._dollar_quoted_string_value),
               $._dollar_quoted_string_end_tag
             ),
             $.string

@@ -5,8 +5,9 @@
 
 enum TokenType {
   DOLLAR_QUOTED_STRING_START_TAG,
+  DOLLAR_QUOTED_STRING_START_TAG_LABEL,
   DOLLAR_QUOTED_STRING_END_TAG,
-  DOLLAR_QUOTED_STRING
+  DOLLAR_QUOTED_STRING_VALUE
 };
 
 #define MALLOC_STRING_SIZE 1024
@@ -116,24 +117,13 @@ bool tree_sitter_sql_external_scanner_scan(void *payload, TSLexer *lexer, const 
     return false;
   }
 
-  if (valid_symbols[DOLLAR_QUOTED_STRING]) {
+  if (valid_symbols[DOLLAR_QUOTED_STRING_VALUE]) {
     lexer->mark_end(lexer);
     while (iswspace(lexer->lookahead)) lexer->advance(lexer, true);
-
-    char* start_tag = scan_dollar_string_tag(lexer);
-    if (start_tag == NULL) {
-      return false;
-    }
-
-    if (state->start_tag != NULL && strcmp(state->start_tag, start_tag) == 0) {
-      free(start_tag);
-      return false;
-    }
 
     char* end_tag = NULL;
     while (true) {
       if (lexer->eof(lexer)) {
-        free(start_tag);
         free(end_tag);
         return false;
       }
@@ -141,14 +131,13 @@ bool tree_sitter_sql_external_scanner_scan(void *payload, TSLexer *lexer, const 
       end_tag = scan_dollar_string_tag(lexer);
       if (end_tag == NULL) {
         lexer->advance(lexer, false);
+        lexer->mark_end(lexer);
         continue;
       }
 
-      if (strcmp(end_tag, start_tag) == 0) {
-        free(start_tag);
+      if (strcmp(end_tag, state->start_tag) == 0) {
         free(end_tag);
-        lexer->mark_end(lexer);
-        lexer->result_symbol = DOLLAR_QUOTED_STRING;
+        lexer->result_symbol = DOLLAR_QUOTED_STRING_VALUE;
         return true;
       }
 
