@@ -191,7 +191,10 @@ SELECT $${"some":"json"}$$;
       (keyword_select)
       (select_expression
         (term
-          (literal))))))
+          (literal
+            (string
+              tag: (identifier)
+              value: (literal))))))))
 
 ================================================================================
 dollar quoted string (tagged)
@@ -207,4 +210,7 @@ SELECT $json${"some":"json"}$json$;
       (keyword_select)
       (select_expression
         (term
-          (literal))))))
+          (literal
+            (string
+              tag: (identifier)
+              value: (literal))))))))

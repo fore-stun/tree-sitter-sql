@@ -1099,7 +1099,10 @@ $a$
         (dollar_quote)
         (keyword_begin)
         (keyword_return)
-        (literal)
+        (literal
+          (string
+            tag: (identifier)
+            value: (literal)))
         (keyword_end)
         (dollar_quote)))))
 
@@ -1139,6 +1142,9 @@ $_$
         (dollar_quote)
         (keyword_begin)
         (keyword_return)
-        (literal)
+        (literal
+          (string
+            tag: (identifier)
+            value: (literal)))
         (keyword_end)
         (dollar_quote)))))
