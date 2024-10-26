@@ -126,6 +126,7 @@ bool tree_sitter_sql_external_scanner_scan(void *payload, TSLexer *lexer, const 
     }
 
     if (state->start_tag != NULL && strcmp(state->start_tag, start_tag) == 0) {
+      free(start_tag);
       return false;
     }
 
