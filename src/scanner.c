@@ -57,7 +57,8 @@ static char* scan_dollar_string_tag(TSLexer *lexer) {
   size_t* text_size = malloc(sizeof(size_t));
   *text_size = 0;
   if (lexer->lookahead == '$') {
-    tag = add_char(tag, text_size, '$', index);
+    tag = malloc(sizeof(char) * MALLOC_STRING_SIZE);
+    tag[index] = '\0';
     lexer->advance(lexer, false);
   } else {
     free(text_size);
@@ -70,7 +71,6 @@ static char* scan_dollar_string_tag(TSLexer *lexer) {
   }
 
   if (lexer->lookahead == '$') {
-    tag = add_char(tag, text_size, lexer->lookahead, ++index);
     lexer->advance(lexer, false);
     free(text_size);
     return tag;
